@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 )
@@ -81,7 +80,7 @@ func main() {
 // Function to write source code to a file and build the binary
 func writeAndBuild(binaryName, content string) error {
 	fileName := binaryName + ".go"
-	if err := ioutil.WriteFile(fileName, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(fileName, []byte(content), 0644); err != nil {
 		return fmt.Errorf("error writing %s: %w", fileName, err)
 	}
 	if err := buildBinary(binaryName, fileName); err != nil {
