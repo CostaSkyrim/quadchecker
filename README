@@ -1,0 +1,12 @@
+A brief user guide.
+
+Create files. 
+To use quadchecker program, first we need to create quadA, quadB, quadC, quadD, quadE and quadchecker binaries. Here is the example code to create these files :- $ go run main.go build quadA
+
+Usage. 
+The files can be run the following ways 
+$ ./quadA 3 3 | go run .
+$ ./quadA 3 3 | ./quadchecker
+$./quadC 1 1
+
+Thats all. Have fun playing with it. 
