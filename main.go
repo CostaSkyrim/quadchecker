@@ -96,9 +96,9 @@ func writeAndBuild(binaryName, content string) error {
 // Function to build a binary file from a given .go file
 func buildBinary(outputName, sourceFile string) error {
 	cmd := exec.Command("go", "build", "-o", outputName, sourceFile) // Command to build the binary
-	cmd.Stdout = os.Stdout // Output command stdout to the console
-	cmd.Stderr = os.Stderr // Output command stderr to the console
-	return cmd.Run() // Rune the command and return any error
+	cmd.Stdout = os.Stdout                                           // Output command stdout to the console
+	cmd.Stderr = os.Stderr                                           // Output command stderr to the console
+	return cmd.Run()                                                 // Rune the command and return any error
 }
 
 // Function to run the quadchecker functionality
@@ -128,7 +128,7 @@ func runQuadchecker() error {
 	}
 	// Check if the grid dimensions are valid
 	if x == 0 || y == 0 {
-		fmt.Println("Not a Raid function")
+		fmt.Println("Not a quad function")
 		return nil
 	}
 	// Check if the input matches any known pattern and output the corresponding quad type
@@ -168,7 +168,7 @@ func runQuadchecker() error {
 		return nil
 	}
 
-	fmt.Println("Not a Raid function") // Print if no patterns matched
+	fmt.Println("Not a quad function") // Print if no patterns matched
 	return nil
 }
 
@@ -205,7 +205,7 @@ func isEqual(str string, x, y int, c1, c2, c3, c4, hor, ver rune) bool {
 		arrE = append(arrE, '\n')
 	}
 	strE := string(arrE) // Convert the array of runes to a string
-	return strE == str // Return whether the generated pattern matches the input string
+	return strE == str   // Return whether the generated pattern matches the input string
 }
 
 // Function to clean up temporary .go files
@@ -518,7 +518,7 @@ func main() {
 		}
 	}
 	if x == 0 || y == 0 {
-		fmt.Println("Not a Raid function")
+		fmt.Println("Not a quad function")
 		return
 	}
 	if isEqual(str, x, y, 'o', 'o', 'o', 'o', '-', '|') {
@@ -556,7 +556,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Not a Raid function")
+	fmt.Println("Not a quad function")
 }
 
 func isEqual(str string, x, y int, c1, c2, c3, c4, hor, ver rune) bool {
