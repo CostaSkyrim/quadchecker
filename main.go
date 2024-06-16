@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// Check command-line arguments
+	// Check if there are any command-line arguments provided
 	if len(os.Args) == 1 {
 		// No arguments provided, run quadchecker functionality
 		if err := runQuadchecker(); err != nil {
@@ -17,20 +17,22 @@ func main() {
 		return
 	}
 
+	// Ensure there are enough arguments for the "build" command
 	if len(os.Args) < 3 {
 		fmt.Println("Usage: go run main.go build <binary>")
 		return
 	}
 
-	action := os.Args[1]
-	target := os.Args[2]
+	action := os.Args[1] // The action to perform (e.g., "build")
+	target := os.Args[2] // The target binary to build (e.g., "quadA")
 
+	// Check if the action is "build"
 	if action != "build" {
 		fmt.Println("Unknown action:", action)
 		return
 	}
 
-	// Build the specified binary
+	// Build the specified binary based on the target
 	switch target {
 	case "quadA":
 		if err := writeAndBuild("quadA", quadAContent); err != nil {
@@ -73,16 +75,18 @@ func main() {
 		return
 	}
 
-	// Clean up temporary .go files
+	// Clean up temporary .go files after building the binary
 	cleanup(target + ".go")
 }
 
 // Function to write source code to a file and build the binary
 func writeAndBuild(binaryName, content string) error {
 	fileName := binaryName + ".go"
+	// Write the source code content to the file
 	if err := os.WriteFile(fileName, []byte(content), 0644); err != nil {
 		return fmt.Errorf("error writing %s: %w", fileName, err)
 	}
+	// Build the binary from the source code file
 	if err := buildBinary(binaryName, fileName); err != nil {
 		return fmt.Errorf("error building %s binary: %w", binaryName, err)
 	}
@@ -91,28 +95,29 @@ func writeAndBuild(binaryName, content string) error {
 
 // Function to build a binary file from a given .go file
 func buildBinary(outputName, sourceFile string) error {
-	cmd := exec.Command("go", "build", "-o", outputName, sourceFile)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	cmd := exec.Command("go", "build", "-o", outputName, sourceFile) // Command to build the binary
+	cmd.Stdout = os.Stdout // Output command stdout to the console
+	cmd.Stderr = os.Stderr // Output command stderr to the console
+	return cmd.Run() // Rune the command and return any error
 }
 
 // Function to run the quadchecker functionality
 func runQuadchecker() error {
-	var arr []rune
+	var arr []rune // Array to hold the input runes
 
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(os.Stdin) // Create a new buffered reader for stdin
 	for {
-		char, _, err := reader.ReadRune()
+		char, _, err := reader.ReadRune() // Read a rune from stdin
 		if err != nil {
-			break
+			break // Break on error (e.g., EOF)
 		}
-		arr = append(arr, char)
+		arr = append(arr, char) // Append the rune to the array
 	}
-	str := string(arr)
+	str := string(arr) // Convert the array of runes to a string
 
-	x := 0
-	y := 0
+	x := 0 // Width of the input grid
+	y := 0 // Height of the input grid
+	// Calculate the dimensions of the input grid
 	for _, char := range arr {
 		if char != '\n' && y == 0 {
 			x++
@@ -121,10 +126,12 @@ func runQuadchecker() error {
 			y++
 		}
 	}
+	// Check if the grid dimensions are valid
 	if x == 0 || y == 0 {
 		fmt.Println("Not a Raid function")
 		return nil
 	}
+	// Check if the input matches any known pattern and output the corresponding quad type
 	if isEqual(str, x, y, 'o', 'o', 'o', 'o', '-', '|') {
 		fmt.Printf("[quadA] [%v] [%v]\n", x, y)
 		return nil
@@ -135,7 +142,7 @@ func runQuadchecker() error {
 		return nil
 	}
 
-	n := 0
+	n := 0 // Counter for matching patterns
 	if isEqual(str, x, y, 'A', 'A', 'C', 'C', 'B', 'B') {
 		n++
 		fmt.Printf("[quadC] [%v] [%v]", x, y)
@@ -155,17 +162,20 @@ func runQuadchecker() error {
 		fmt.Printf("[quadE] [%v] [%v]", x, y)
 	}
 
+	// Print a new line if any patterns matched
 	if n > 0 {
 		fmt.Println()
 		return nil
 	}
 
-	fmt.Println("Not a Raid function")
+	fmt.Println("Not a Raid function") // Print if no patterns matched
 	return nil
 }
 
+// Function to check if the input matches a given pattern
 func isEqual(str string, x, y int, c1, c2, c3, c4, hor, ver rune) bool {
-	var arrE []rune
+	var arrE []rune // Array to hold the expected pattern
+	// Generate the expected pattern based on the given parameters
 	for i := 0; i < y; i++ {
 		for j := 0; j < x; j++ {
 			if i == 0 {
@@ -194,8 +204,8 @@ func isEqual(str string, x, y int, c1, c2, c3, c4, hor, ver rune) bool {
 		}
 		arrE = append(arrE, '\n')
 	}
-	strE := string(arrE)
-	return strE == str
+	strE := string(arrE) // Convert the array of runes to a string
+	return strE == str // Return whether the generated pattern matches the input string
 }
 
 // Function to clean up temporary .go files
